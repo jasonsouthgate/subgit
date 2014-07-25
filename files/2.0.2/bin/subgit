@@ -1,0 +1,124 @@
+#!/bin/bash
+
+PRG="$0"
+
+# need this for relative symlinks
+while [ -h "$PRG" ] ; do
+  ls_out=`ls -ld "$PRG"`
+  link=`expr "$ls_out" : '.*-> \(.*\)$'`
+  if expr "$link" : '/.*' > /dev/null; then
+    PRG="$link"
+  else
+    PRG="`dirname "$PRG"`/$link"
+  fi
+done
+
+saveddir=`pwd`
+BASEDIR=`dirname "$PRG"`/..
+
+# make it fully qualified
+BASEDIR=`cd "$BASEDIR" && pwd`
+cd "$saveddir"
+
+
+cygwin=false;
+darwin=false;
+case "`uname`" in
+  CYGWIN*) cygwin=true ;;
+  Darwin*) darwin=true
+           if [ -z "$JAVA_VERSION" ] ; then
+             JAVA_VERSION="CurrentJDK"
+           else
+             echo "Using Java version: $JAVA_VERSION"
+           fi
+           if [ -z "$JAVA_HOME" ] ; then
+             JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/${JAVA_VERSION}/Home
+           fi
+           ;;
+esac
+
+if [ -z "$JAVA_HOME" ] ; then
+  if [ -r /etc/gentoo-release ] ; then
+    JAVA_HOME=`java-config --jre-home`
+  fi
+fi
+
+# For Cygwin, ensure paths are in UNIX format before anything is touched
+if $cygwin ; then
+  [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+fi
+
+# If a specific java binary isn't specified search for the standard 'java' binary
+if [ -z "$JAVACMD" ] ; then
+  if [ -n "$JAVA_HOME"  ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+    fi
+  else
+    JAVACMD=`which java`
+  fi
+fi
+
+if [ ! -x "$JAVACMD" ] ; then
+  echo "Error: JAVA_HOME is not defined correctly."
+  echo "  We cannot execute $JAVACMD"
+  exit 1
+fi
+
+TS_LIB="$TS_LIB_DEFAULT"
+
+if [ -z "$TS_LIB" ]
+then
+  TS_LIB="$BASEDIR"/lib
+fi
+
+TS_CLASSPATH="$TS_LIB/subgit-2.0.2.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/svngitkit-2.2.0-SNAPSHOT_r3332_v20140225_1424.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/svnkit-1.8.4.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jansi-1.6.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/trilead-ssh2-1.0.0-build217.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.core-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.svnkit-trilead-ssh2-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jna-3.5.2.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/antlr-runtime-3.4.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/sqljet-1.1.10.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/platform-3.5.2.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.usocket-jna-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.usocket-nc-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.sshagent-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.pageant-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch.agentproxy.connector-factory-0.0.7.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/sequence-library-1.0.2.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/JavaEWAH-0.5.6.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/jsch-0.1.44-1.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/org.eclipse.jgit-0.11.9-sgk-SNAPSHOT_t20131003_1942.jar"
+TS_CLASSPATH=$TS_CLASSPATH:"$TS_LIB/annotations-7.0.3.jar"
+
+EXTRA_JVM_ARGUMENTS="-Dsun.io.useCanonCaches=false -Djava.awt.headless=true"
+
+# For Cygwin, switch paths to Windows format before running java
+if $cygwin; then
+  [ -n "$TS_CLASSPATH" ] && TS_CLASSPATH=`cygpath --path --windows "$TS_CLASSPATH"`
+  [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
+  [ -n "$HOME" ] && HOME=`cygpath --path --windows "$HOME"`
+  [ -n "$BASEDIR" ] && BASEDIR=`cygpath --path --windows "$BASEDIR"`
+  [ -n "$REPO" ] && REPO=`cygpath --path --windows "$REPO"`
+fi
+
+for var in "$@"
+do
+    case "$var" in 
+        "--shared")
+            umask 0002
+            ;;
+    esac
+done
+
+exec "$JAVACMD" $JAVA_OPTS \
+  $EXTRA_JVM_ARGUMENTS \
+  -classpath "$TS_CLASSPATH" \
+  org.tmatesoft.translator.SubGit \
+  "$@"

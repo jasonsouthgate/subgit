@@ -1,0 +1,3 @@
+Known issues of  SubGit version 2.0.2 ('Patrick') build #2731:
+
+* Translation is performed in the background, but in case of concurrent Git and Subversion write access, user may experience delays.

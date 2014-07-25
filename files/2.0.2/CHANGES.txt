@@ -1,0 +1,194 @@
+SubGit 2.0.2
+Build 2731 published on Mar 10, 2014
+====================================
+New Features:
+
+* SGT-837 : Introduced pathEncoding value "none". When it is specified, no %-encoding is performed while translation file paths.
+
+Fixed Bugs:
+
+* SGT-838: Import command ignored ssl key path entered from keyboard.
+* SGT-835: "Path 'XXX' not present" error while push, if a directory with all children skipped was renamed in Git.
+* SGT-835: "File already exists" error while push, if a directory with .gitignore was renamed in Git 
+           and this .gitignore contains patterns corresponding to empty directories.
+* SGT-834: If SVN author is an e-mail address, don't add "@defaultDomain" to get Git author's e-mail.
+* SGT-831: On deletion "skip" patterns were applied to project-relative paths, not branch-relative.
+* SGT-825: Push translation fails if ".gitignore" file is renamed to any other file.
+
+SubGit 2.0.1
+Build #2706 published on Dec 26, 2013
+====================================
+New Features:
+
+* SGT-780 : support Subversion 1.8 repositories in local mirror mode.
+* SGT-772 : support partial layout update on the fly.
+* SGT-781 : SSH-agent support.
+
+Fixed Bugs:
+
+* Stability and performance improvements.
+
+SubGit 2.0.2-RC1
+Build #2593 published on Jul 24, 2013
+====================================
+
+ * 2.0.0 Release Candidate version.  
+   
+
+SubGit 2.0.0-EAP5
+Build #2552 published on May 30 2013
+====================================
+New Features:
+
+ * SGT-81 : core.defaultDomain option to specify domain name to use
+            for email composition in absence of explicit authors mapping.
+ * SGT-586: Options added to specify default Subversion configuration directory
+            to look for credentials.
+ * SGT-588: Improved console feedback on Git push.  
+   
+Fixed Bugs:
+
+ * SGT-648: Improved background process detection algorithm to avoid multiple 
+            background processes launch.
+ * SGT-659: Same translation shared by multiple Git repositories were not supported. 
+ * SGT-630: minimalRevision option support was broken in remote repository mirror mode. 
+ * SGT-640: Exception on attempt to push to unmapped Git branch.
+ * SGT-639: Configure command failed with JRockit JVM.
+
+SubGit 2.0.0-EAP3
+Build #2208 published on Feb 2 2013
+====================================
+New Features:
+ * Native hook executables are used whenever possible to improve performance
+   and reduce translation overhead.
+   
+Fixed Bugs:
+
+ * SGT-597   Default timeout values increased, too short ones caused interim failures.
+ * SGT-594   In certain cases pushing new branch or branch deletion from Git resulted in OOD error.
+ * SGT-547   It is now possible to configure non-empty Git repository to be a mirror 
+             of a remote Subversion one (assuming Subversion project does not yet exist).
+             
+ * Numerous minor stability improvements.  
+
+SubGit 2.0.0-EAP2
+Build #2018 published on Dec 17 2012
+====================================
+New Features:
+ * Writable Git mirror of a remote Subversion repository; 
+   see 'subgit help configure' and 'subgit help install' for details.
+ 
+SubGit 1.0.2
+Build #1764 published on Oct 15 2012
+====================================
+Fixed Bugs:
+ * SGT-530  Potential failure on translating deletion of the 'trunk' directory.
+ * SGT-531  File handlers leak on SubGit installation stage (in case of a huge repository).
+ * SGT-533  JDK 1.7 specific exception on Git to Subversion translation: comparison method violates its general contract.
+ 
+SubGit 1.0.1
+Build #1696 published on Oct 3 2012
+====================================
+Fixed Bugs:
+ * Wrong order of options in subgit.conf configuration file (SGT-526) fixed.
+ * Potential BUSY error during translation (SGT-518) fixed.
+ * Copied 'branches' directory and use of --minimal-revision option might result in failed translation, fixed.
+ * In case Git update hook is present it should not be disabled during SubGit installation (SGT-517).  
+ 
+SubGit 1.0.0
+Build #1696 published on Sep 19 2012
+====================================
+Improvements:
+ * Documentation extended
+
+SubGit 1.0.0-RC2
+Build #1546 published on Jul 28, 2012
+=====================================
+Fixed Bugs:
+ * Windows UNC-style paths supported
+ * Stability fixes in Git to Svn translation engine
+
+SubGit 1.0.0-RC1
+Build #1519 published on Jul 16, 2012
+=====================================
+New Features:
+ * Registration support added
+ 
+Fixed Bugs:
+ * Stability fixes
+
+SubGit 1.0.0-EAP5
+Build #1096 published on Feb 13, 2012
+=====================================
+New features:
+ * Command option added: 'configure --minimal-revision'
+ * Command option added: 'uninstall --purge'
+ * User hooks are ran when present
+ * Config options added: 'hooks.javaOptions' and 'daemon.javaOptions'
+ * Daemon idle timeout option made configurable
+
+Improvements:
+ * Improved file permissions issues handling
+
+Fixed Bugs:
+ * Invalid error report created on crash
+ * 'pre-commit' hook error did not block commit on Windows XP/Server 2003
+ * Daemon process failed to exit
+ * Checksum mismatch on svn:eol-style/.gitattributes modification
+
+
+SubGit 1.0.0-EAP4
+Build #902 published on Dec 20, 2011
+====================================
+New features:
+ * Debian package distribution
+
+Improvements:
+ * Daemon launch time decreased
+ * Translation: svn:ignore <=> .gitignore
+
+Fixed Bugs:
+ * 'Cannot assign requested address' error
+ * Modification of svn:ignore removed empty directories
+ * Install failed to upgrade libraries
+ * JVM arguments in hook scripts on Windows
+
+
+SubGit 1.0.0-EAP3
+Build #789 published on Nov 19, 2011
+====================================
+New Features:
+ * Multiple Git repositories support
+ * Commands added: 'configure', 'install', 'uninstall'
+ * Command option added:  'install --rebuild'
+ * Config option added: 'git.pathEncoding'
+ * Repository layout detection
+
+Improvements:
+ * Better error reporting
+
+Fixed Bugs:
+ * Possible dead-lock in case of concurrent access
+ * Multiple Daemon processes launched for a single Svn repository
+
+
+SubGit 1.0.0-EAP2
+Build #493 published on Sep 16, 2011
+====================================
+New Features:
+ * Commit time ordering for Git to Svn translation
+ * Config option added: 'core.shared'
+
+Improvements:
+ * Git to Svn translation performance
+ * File permissions issues handling
+
+Fixed Bugs:
+ * Invalid message prefix in branch name
+ * Branch/tag creation commit time
+
+
+SubGit 1.0.0-EAP1
+Build #387 published on Aug 30, 2011
+====================================
+ * Basic single Subversion/Git repository support

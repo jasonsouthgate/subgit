@@ -1,0 +1,3 @@
+# subgit #
+
+This is the subgit module. It provides...

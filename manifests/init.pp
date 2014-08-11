@@ -65,6 +65,7 @@ class subgit (
   exec { "${install_dir}/subgit/bin/subgit install ${git_repo}":
     #TODO: this needs stopping for idempotency
     require => File["${git_repo}/subgit/passwd"],
+    creates => "${git_repo}/hooks/post-receive",
   }
 
   file { "${git_repo}/subgit/subgit.key":

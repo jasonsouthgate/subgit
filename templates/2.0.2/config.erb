@@ -42,14 +42,14 @@
         #   svnUser <svnUser@example.com>
         #
         # If no domain is specified, empty e-mail address will be used.
-        defaultDomain = puppetmaster.ov.otto.de
+        defaultDomain = <%= scope.lookupvar('::fqdn') %>
 
 #
 # Subversion to Git mapping options
 #
 [svn]
         # Subversion repository URL
-        url = http://subversion01.ov.otto.de/svn/PE_puppet
+        url = <%= @svn_repo %>
 
         # Layout that describes how to map Subversion directory that represent trunk, branch or tag
         # to the corresponding Git reference and vice versa.
@@ -78,7 +78,7 @@
         shelves = shelves/*:refs/shelves/*
 
         # Interval between checks for new changes in Subversion repository in seconds.
-        fetchInterval = <%= @fetch_interval %>
+        fetchInterval = <%= @fetch_interval_secs %>
 
         # Subversion connection establishment timeout in seconds.
         connectTimeout = 30

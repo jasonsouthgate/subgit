@@ -1,0 +1,5 @@
+# Managed by Puppet - DO NOT EDIT
+<% svn_authors.each do |key, value| -%>
+<%= value['svn_user_name'] %> = <%= value['git_name'] %> <<%= value['git_email'] %>>
+<% end -%>
+

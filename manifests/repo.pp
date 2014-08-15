@@ -1,5 +1,5 @@
-define repo (
-  $git_repo,
+define subgit::repo (
+  $git_repo = undef,
   $svn_repo,
   $svn_user,
   $svn_passwd,
@@ -13,43 +13,48 @@ define repo (
   $fetch_interval_secs ='60' )
 {
 
-  exec { "${install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${git_repo}":
+  $this_git_repo = $git_repo ? {
+    undef   => $name,
+    default => $git_repo,
+  }
+
+  exec { "${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}":
     require => [ File["${subgit::install_dir}/subgit-${subgit::version}"],
                  File["${subgit::install_dir}/subgit-${subgit::version}/bin/subgit"],
                  File["${subgit::install_dir}/subgit"] ],
-    creates => $git_repo,
+    creates => $this_git_repo,
   }
 
-  file { "${git_repo}/subgit/config":
+  file { "${this_git_repo}/subgit/config":
     content => template("subgit/${subgit::version}/config.erb"),
-    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${git_repo}"],
+    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}"],
   }
 
-  file { "${git_repo}/subgit/passwd":
+  file { "${this_git_repo}/subgit/passwd":
     content => "${svn_user} ${svn_passwd}\n",
-    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${git_repo}"],
+    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}"],
   }
 
-  file{ "${git_repo}/subgit/authors.txt":
+  file{ "${this_git_repo}/subgit/authors.txt":
     content => template("subgit/${subgit::version}/authors.txt.erb"),
   }
 
-  exec { "${subgit::install_dir}/subgit/bin/subgit install ${git_repo}":
-    require => [ File["${git_repo}/subgit/passwd"],
-                 File["${git_repo}/subgit/config"],
-                 File["${git_repo}/subgit/authors.txt"] ],
-    creates => "${git_repo}/hooks/post-receive",
+  exec { "${subgit::install_dir}/subgit/bin/subgit install ${this_git_repo}":
+    require => [ File["${this_git_repo}/subgit/passwd"],
+                 File["${this_git_repo}/subgit/config"],
+                 File["${this_git_repo}/subgit/authors.txt"] ],
+    creates => "${this_git_repo}/hooks/post-receive",
   }
 
-  file { "${git_repo}/subgit/subgit.key":
+  file { "${this_git_repo}/subgit/subgit.key":
     ensure  => 'present',
-    content => template("subgit/${subgit_version}/subgit.key"),
-    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${git_repo}"],
-    before  => Exec["${subgit::install_dir}/subgit/bin/subgit register ${git_repo}"],
+    content => template("subgit/${subgit::version}/subgit.key.erb"),
+    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}"],
+    before  => Exec["${subgit::install_dir}/subgit/bin/subgit register ${this_git_repo}"],
   }
 
-  exec { "${subgit::install_dir}/subgit/bin/subgit register ${git_repo}":
-    require => Exec["${subgit::install_dir}/subgit/bin/subgit install ${git_repo}"],
+  exec { "${subgit::install_dir}/subgit/bin/subgit register ${this_git_repo}":
+    require => Exec["${subgit::install_dir}/subgit/bin/subgit install ${this_git_repo}"],
     #creates =>
   }
 }

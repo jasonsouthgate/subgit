@@ -1,6 +1,6 @@
 # subgit #
 
-This is a Puppet module for Subgit. It installs the software through the Puppet fileserver. There is a subgit::repo definition to add required repos.
+This is a Puppet module for Subgit http://subgit.com. It installs the software through the Puppet fileserver. There is a subgit::repo definition to add required remote mirrored git repos of a Subversion repository. See docs for more explanation: http://subgit.com/book-remote/index.html#installation
 
 ###Installing Subgit
 

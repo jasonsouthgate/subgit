@@ -1,6 +1,6 @@
 # Class: subgit
 #
-# This module installs and manages subgit, and a git mirror of a remote Subversion repo.
+# This module installs and manages subgit.
 #
 # Parameters: none
 #
@@ -18,21 +18,22 @@ class subgit (
   file { $install_dir:
     ensure => directory,
   }
-
-  file { "${install_dir}/subgit-${version}":
-    ensure  => directory,
-    source  => "puppet:///modules/subgit/${version}",
-    mode    => '0644',
-    recurse => true,
-    ignore  => '.svn',
-    require => File[$install_dir],
+  
+  wget::fetch { "http://subgit.com/download/subgit-${version}.zip":
+    destination => "${install_dir}/subgit-${version}.zip",
+    require     => File[$install_dir],
+  }
+  
+  exec { "/usr/bin/unzip subgit-${version}.zip":
+    cwd     => "${install_dir}",
+    creates => "${install_dir}/subgit-${version}/bin/subgit",
+    require => Wget::fetch["http://subgit.com/download/subgit-${version}.zip"],
   }
 
   file { "${install_dir}/subgit-${version}/bin/subgit":
     ensure  => present,
-    source  => "puppet:///modules/subgit/${version}/bin/subgit",
     mode    => '0755',
-    require => File[$install_dir],
+    require => Exec["/usr/bin/unzip subgit-${version}.zip"],
   }
 
   file { "${install_dir}/subgit":

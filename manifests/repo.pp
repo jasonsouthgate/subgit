@@ -19,7 +19,7 @@ define subgit::repo (
   }
 
   exec { "${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}":
-    require => [ Exec["/usr/bin/unzip subgit-${subgit::version}.zip subgit-${subgit::version}"],
+    require => [ Exec["/usr/bin/unzip subgit-${subgit::version}.zip"],
                  File["${subgit::install_dir}/subgit-${subgit::version}/bin/subgit"],
                  File["${subgit::install_dir}/subgit"] ],
     creates => $this_git_repo,

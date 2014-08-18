@@ -15,7 +15,7 @@ class subgit (
   $install_dir = '/usr/local' )
 {
 
-  file { $install_dir:
+  file { "${install_dir}":
     ensure => directory,
   }
   

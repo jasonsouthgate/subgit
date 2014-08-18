@@ -27,7 +27,7 @@ class subgit (
   exec { "/usr/bin/unzip subgit-${version}.zip":
     cwd     => "${install_dir}",
     creates => "${install_dir}/subgit-${version}/bin/subgit",
-    require => Wget::fetch["http://subgit.com/download/subgit-${version}.zip"],
+    require => Wget::Fetch["http://subgit.com/download/subgit-${version}.zip"],
   }
 
   file { "${install_dir}/subgit-${version}/bin/subgit":

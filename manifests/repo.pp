@@ -37,6 +37,7 @@ define subgit::repo (
 
   file{ "${this_git_repo}/subgit/authors.txt":
     content => template("subgit/${subgit::version}/authors.txt.erb"),
+    require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}"],
   }
 
   exec { "${subgit::install_dir}/subgit/bin/subgit install ${this_git_repo}":

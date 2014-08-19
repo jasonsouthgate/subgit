@@ -19,7 +19,7 @@ define subgit::repo (
     default => $git_repo,
   }
 
-  if inline_template( "<%= unless File.exists?(self.lookupvar($creates)) %>" ) {
+  unless inline_template( '<%= File.exists?(self.lookupvar( ${creates} )) %>' ) {
 
     exec { "${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}":
       require => [ Exec["/usr/bin/unzip subgit-${subgit::version}.zip"],

@@ -19,7 +19,7 @@ define subgit::repo (
     default => $git_repo,
   }
 
-  unless $create = undef {
+  unless $creates = undef {
 
     exec { "${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}":
       require => [ Exec["/usr/bin/unzip subgit-${subgit::version}.zip"],

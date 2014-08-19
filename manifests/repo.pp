@@ -59,7 +59,7 @@ define subgit::repo (
   
     exec { "${subgit::install_dir}/subgit/bin/subgit register ${this_git_repo}":
       require => Exec["${subgit::install_dir}/subgit/bin/subgit install ${this_git_repo}"],
-      #creates =>
+      #TODO: creates =>
     }
   }
 }

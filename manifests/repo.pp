@@ -54,7 +54,7 @@ define subgit::repo (
       ensure  => 'present',
       content => template("subgit/${subgit::version}/subgit.key.erb"),
       require => Exec["${subgit::install_dir}/subgit/bin/subgit configure --svn-url ${svn_repo} ${this_git_repo}"],
-      before  => Exec["${subgit::install_dir}/subgit/bin/subgit register ${this_git_repo}"],
+      #before  => Exec["${subgit::install_dir}/subgit/bin/subgit register ${this_git_repo}"],
     }
   
 #    exec { "${subgit::install_dir}/subgit/bin/subgit register ${this_git_repo}":
